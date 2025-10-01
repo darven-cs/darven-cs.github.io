@@ -3,17 +3,17 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
-subtitle: ''
-description: ''
-keywords:
-author: John Doe
-language: en
-timezone: ''
+title: Darven's Blog
+subtitle: '梦想成为解决问题的高手'
+description: '这里是 Darven 的技术成长自留地，专注分享 Java 与 Go 双语言开发实践、算法刷题笔记、开发工具技巧及计算机基础知识。从 SpringBoot 到 Gin 框架，从 JVM 调优到 Goroutine 并发，从 LeetCode 解题到 Git 进阶操作，内容涵盖从入门到进阶的学习轨迹，既有踩坑总结也有原理拆解，愿与同路学习者一起在代码世界里深耕细作，持续精进。'
+keywords: Java, Go, SpringBoot, Gin, JVM, Goroutine, 算法，LeetCode, 数据结构，开发工具，IntelliJ IDEA, Goland, Git, 计算机基础，操作系统，计算机网络，MySQL, 技术博客，学习笔记，程序员成长，双语言开发
+author: Darven
+language:  zh-CN
+timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://example.com
+url: https://darven-cs.github.io/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
@@ -40,7 +40,7 @@ external_link:
   exclude: ''
 filename_case: 0
 render_drafts: false
-post_asset_folder: false
+post_asset_folder: true
 relative_link: false
 future: true
 syntax_highlighter: highlight.js
@@ -96,7 +96,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: fluid  # 指定主题
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
