@@ -98,6 +98,9 @@ ignore:
 ## Themes: https://hexo.io/themes/
 theme: fluid  # 指定主题
 
+remote_theme: fluid-dev/hexo-theme-fluid
+
+
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
