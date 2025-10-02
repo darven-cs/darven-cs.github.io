@@ -1,5 +1,5 @@
 ---
-title: k个一组反转链表
+title: P25.k个一组反转链表
 date: 2025-10-02 12:44:01
 index_img: /img/leetcode.svg
 tags: [leetcode,链表]
