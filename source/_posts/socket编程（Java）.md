@@ -1,7 +1,7 @@
 ---
 title: socket编程（Java）
 date: 2025-10-02 14:55:56
-index_img: /img/java-socket.svg
+index_img: /img/java-socket.png
 tags: [Java,计算机网络，Socket编程]
 categories: [Java,计算机网络]
 ---
