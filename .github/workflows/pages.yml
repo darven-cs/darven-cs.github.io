@@ -1,50 +1,109 @@
+#name: Pages
+#
+#on:
+#  push:
+#    branches:
+#      - main # default branch
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#        with:
+#          token: ${{ secrets.GITHUB_TOKEN }}
+#          # If your repository depends on submodule, please see: https://github.com/actions/checkout
+#          submodules: recursive
+#      - name: Use Node.js 22
+#        uses: actions/setup-node@v4
+#        with:
+#          # Examples: 20, 18.19, >=16.20.2, lts/Iron, lts/Hydrogen, *, latest, current, node
+#          # Ref: https://github.com/actions/setup-node#supported-version-syntax
+#          node-version: "22"
+#      - name: Cache NPM dependencies
+#        uses: actions/cache@v4
+#        with:
+#          path: node_modules
+#          key: ${{ runner.OS }}-npm-cache
+#          restore-keys: |
+#            ${{ runner.OS }}-npm-cache
+#      - name: Install Dependencies
+#        run: npm install
+#      - name: Build
+#        run: npm run build
+#      - name: Upload Pages artifact
+#        uses: actions/upload-pages-artifact@v3
+#        with:
+#          path: ./public
+#  deploy:
+#    needs: build
+#    permissions:
+#      pages: write
+#      id-token: write
+#    environment:
+#      name: github-pages
+#      url: ${{ steps.deployment.outputs.page_url }}
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Deploy to GitHub Pages
+#        id: deployment
+#        uses: actions/deploy-pages@v4
+
 name: Pages
 
 on:
   push:
     branches:
-      - main # default branch
+      - main # 触发构建的分支（默认主分支，可按需修改）
+  workflow_dispatch: # 支持手动触发，方便调试
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # 1. 拉取代码（含子模块，若有）
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          # If your repository depends on submodule, please see: https://github.com/actions/checkout
-          submodules: recursive
-      - name: Use Node.js 22
-        uses: actions/setup-node@v4
+          submodules: recursive # 若项目无submodule，可删此句
+          fetch-depth: 0 # 拉取完整历史，避免Hexo生成时缺失提交记录
+
+      # 2. 配置Node.js环境（Fluid无特殊版本限制，22.x兼容）
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v5 # 建议升级到v5（更稳定的缓存逻辑）
         with:
-          # Examples: 20, 18.19, >=16.20.2, lts/Iron, lts/Hydrogen, *, latest, current, node
-          # Ref: https://github.com/actions/setup-node#supported-version-syntax
           node-version: "22"
-      - name: Cache NPM dependencies
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-npm-cache
-          restore-keys: |
-            ${{ runner.OS }}-npm-cache
-      - name: Install Dependencies
+          cache: "npm" # 自动缓存npm依赖（替代原手动缓存，更简洁）
+          cache-dependency-path: "**/package-lock.json" # 精准匹配依赖文件
+
+      # 3. 安装项目依赖（含Hexo和Fluid主题）
+      - name: Install dependencies
         run: npm install
-      - name: Build
-        run: npm run build
+
+      # 4. 构建Hexo项目（生成静态文件到public目录）
+      - name: Build Hexo site with Fluid theme
+        run: npm run build # 关键：需确保package.json的scripts含"build": "hexo generate"
+        env:
+          NODE_ENV: production # 生产环境构建，优化静态资源
+
+      # 5. 上传构建产物（public目录）到GitHub Pages Artifact
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./public
+          path: ./public # Hexo默认输出目录，不可修改（除非改Hexo配置）
+
+  # 6. 部署到GitHub Pages（依赖build阶段的产物）
   deploy:
     needs: build
     permissions:
-      pages: write
-      id-token: write
+      pages: write # 部署必须的权限
+      id-token: write # 用于身份验证
     environment:
-      name: github-pages
+      name: github-pages # 固定环境名，与GitHub Pages关联
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v4 # 最新版部署工具，支持Artifact直接部署
