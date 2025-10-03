@@ -1,6 +1,7 @@
 ---
 title: P146.LRU缓存
 date: 2025-10-03 14:57:17
+index_img: /img/leetcode.svg
 tags: [leetcode,链表,LRU,Map]
 categories: [算法]
 ---
