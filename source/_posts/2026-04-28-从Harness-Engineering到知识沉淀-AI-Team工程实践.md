@@ -3,7 +3,7 @@ title: '从 Harness Engineering 说起：为什么我最后选择轻量化记忆
 index_img: /img/avatar.jpg
 date: 2026-04-28
 tags: [ai, engineering, knowledge, workflow, claude-code]
-categories: [技术]
+categories: [AI]
 ---
 
 最近 AI 工程圈最火的话题是什么？无疑是 Harness Engineering。
